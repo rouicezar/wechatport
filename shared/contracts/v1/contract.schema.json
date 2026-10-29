@@ -1,0 +1,1265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wechatport:contracts:1.0.0",
+  "title": "WeChatPort cross-platform contract v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "attachment"
+        },
+        "data": {
+          "$ref": "#/$defs/attachment"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "counts"
+        },
+        "data": {
+          "$ref": "#/$defs/counts"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "ready"
+        },
+        "data": {
+          "$ref": "#/$defs/ready"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "occurrence"
+        },
+        "data": {
+          "$ref": "#/$defs/occurrence"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "dedup"
+        },
+        "data": {
+          "$ref": "#/$defs/dedup"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "error"
+        },
+        "data": {
+          "$ref": "#/$defs/error"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "event"
+        },
+        "data": {
+          "$ref": "#/$defs/event"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "model"
+        },
+        "data": {
+          "$ref": "#/$defs/model"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "snapshot"
+        },
+        "data": {
+          "$ref": "#/$defs/snapshot"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "generation"
+        },
+        "data": {
+          "$ref": "#/$defs/generation"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "workspace"
+        },
+        "data": {
+          "$ref": "#/$defs/workspace"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "group"
+        },
+        "data": {
+          "$ref": "#/$defs/group"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "import_event"
+        },
+        "data": {
+          "$ref": "#/$defs/import_event"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "batch"
+        },
+        "data": {
+          "$ref": "#/$defs/batch"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "canonical_message"
+        },
+        "data": {
+          "$ref": "#/$defs/canonical_message"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "collection"
+        },
+        "data": {
+          "$ref": "#/$defs/collection"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "template"
+        },
+        "data": {
+          "$ref": "#/$defs/template"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "model_profile"
+        },
+        "data": {
+          "$ref": "#/$defs/model_profile"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "brief"
+        },
+        "data": {
+          "$ref": "#/$defs/brief"
+        }
+      },
+      "required": [
+        "kind",
+        "data"
+      ]
+    }
+  ],
+  "$defs": {
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "original_name": {
+          "type": "string"
+        },
+        "relative_path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\\\)(?!.*(^|/)\\.\\.(/|$))(?!.*:).+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "media_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "original_name",
+        "relative_path",
+        "sha256",
+        "byte_count",
+        "media_type"
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "imported": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "confirmed_duplicate": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unparsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "suspected": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "imported",
+        "confirmed_duplicate",
+        "new",
+        "unparsed",
+        "suspected"
+      ]
+    },
+    "ready": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source_channel": {
+          "type": "string",
+          "enum": [
+            "system_share",
+            "manual_import"
+          ]
+        },
+        "state": {
+          "const": "ready"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attachment"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "schema_version",
+        "batch_id",
+        "received_at",
+        "source_channel",
+        "state",
+        "attachments"
+      ]
+    },
+    "occurrence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "source_entry": {
+          "type": "string"
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_locator": {
+          "type": "string",
+          "pattern": "^source://[0-9a-f-]{36}/[^/]+/[1-9][0-9]*$"
+        },
+        "sender_raw": {
+          "type": "string"
+        },
+        "time_raw": {
+          "type": "string"
+        },
+        "time_precision": {
+          "type": "string",
+          "enum": [
+            "second",
+            "minute",
+            "day",
+            "unknown"
+          ]
+        },
+        "interpreted_local_time": {
+          "type": "string"
+        },
+        "interpretation_timezone": {
+          "type": "string"
+        },
+        "text_raw": {
+          "type": "string"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attachment"
+          }
+        },
+        "parse_warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "batch_id",
+        "group_id",
+        "source_entry",
+        "ordinal",
+        "source_locator",
+        "sender_raw",
+        "time_raw",
+        "time_precision",
+        "text_raw",
+        "attachments",
+        "parse_warnings"
+      ]
+    },
+    "dedup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "occurrence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "canonical_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "confirmed_duplicate",
+            "suspected",
+            "keep",
+            "user_merge"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "trusted_source_id",
+            "sequence_overlap",
+            "coarse_candidate",
+            "insufficient_evidence",
+            "user_override"
+          ]
+        },
+        "algorithm_version": {
+          "type": "string"
+        },
+        "user_override": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "reverses_decision_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "id",
+        "group_id",
+        "occurrence_ids",
+        "canonical_id",
+        "decision",
+        "reason",
+        "algorithm_version",
+        "user_override",
+        "created_at"
+      ]
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stage": {
+          "type": "string",
+          "enum": [
+            "receiving",
+            "archiving",
+            "parsing",
+            "dedup",
+            "credential",
+            "planning",
+            "generating",
+            "merging",
+            "validating",
+            "saving",
+            "registration"
+          ]
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "source_access_lost",
+            "copy_incomplete",
+            "permission_denied",
+            "disk_full",
+            "path_unavailable",
+            "unsafe_archive",
+            "parse_failed",
+            "auth_failed",
+            "quota_exceeded",
+            "rate_limited",
+            "network_unavailable",
+            "provider_unavailable",
+            "cancelled",
+            "incomplete_coverage",
+            "invalid_reference",
+            "save_failed",
+            "registration_failed",
+            "unknown"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "message_key": {
+          "type": "string"
+        },
+        "retry_after_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "stage",
+        "code",
+        "retryable",
+        "message_key"
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "receiving",
+            "ready",
+            "archiving",
+            "parsing",
+            "review_required",
+            "collected",
+            "failed"
+          ]
+        },
+        "counts": {
+          "$ref": "#/$defs/counts"
+        },
+        "error": {
+          "$ref": "#/$defs/error"
+        }
+      },
+      "required": [
+        "schema_version",
+        "event_id",
+        "batch_id",
+        "occurred_at",
+        "state"
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider_id": {
+          "type": "string"
+        },
+        "model_catalog_id": {
+          "type": "string"
+        },
+        "model_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "catalog_version": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "openai_compatible",
+            "anthropic",
+            "gemini"
+          ]
+        },
+        "endpoint": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "auth_strategy": {
+          "type": "string",
+          "enum": [
+            "bearer",
+            "x_api_key",
+            "google_api_key"
+          ]
+        },
+        "input_budget": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "output_budget": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "parameter_allowlist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "candidate",
+            "available",
+            "disabled"
+          ]
+        },
+        "mac_verified": {
+          "type": "boolean"
+        },
+        "windows_verified": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "provider_id",
+        "model_catalog_id",
+        "model_id",
+        "display_name",
+        "catalog_version",
+        "protocol",
+        "endpoint",
+        "auth_strategy",
+        "input_budget",
+        "output_budget",
+        "parameter_allowlist",
+        "status",
+        "mac_verified",
+        "windows_verified"
+      ]
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "snapshot_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "message_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "batch_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "interpretation_timezone": {
+          "type": "string"
+        },
+        "range_start_inclusive": {
+          "type": "string",
+          "format": "date"
+        },
+        "range_end_inclusive": {
+          "type": "string",
+          "format": "date"
+        },
+        "include_unlocated": {
+          "type": "boolean"
+        },
+        "template_snapshot": {
+          "type": "string"
+        },
+        "provider_id": {
+          "type": "string"
+        },
+        "model_catalog_id": {
+          "type": "string"
+        },
+        "catalog_version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "id",
+        "snapshot_hash",
+        "group_id",
+        "message_ids",
+        "batch_ids",
+        "interpretation_timezone",
+        "range_start_inclusive",
+        "range_end_inclusive",
+        "include_unlocated",
+        "template_snapshot",
+        "provider_id",
+        "model_catalog_id",
+        "catalog_version"
+      ]
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "planning",
+            "generating",
+            "merging",
+            "validating",
+            "draft",
+            "saved",
+            "cancelled",
+            "failed"
+          ]
+        },
+        "covered_message_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true
+        },
+        "referenced_occurrence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true
+        },
+        "failed_segment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "error": {
+          "$ref": "#/$defs/error"
+        }
+      },
+      "required": [
+        "id",
+        "snapshot_id",
+        "state",
+        "covered_message_ids",
+        "referenced_occurrence_ids",
+        "failed_segment_ids"
+      ]
+    },
+    "workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "raw_root": {
+          "type": "string"
+        },
+        "brief_root": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "id",
+        "raw_root",
+        "brief_root",
+        "timezone"
+      ]
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "source_group_key": {
+          "type": "string"
+        },
+        "default_template_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "id",
+        "display_name"
+      ]
+    },
+    "import_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "file_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_channel": {
+          "type": "string",
+          "enum": [
+            "system_share",
+            "manual_import"
+          ]
+        },
+        "linked_batch_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "received",
+            "reused",
+            "failed"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "received_at",
+        "file_hash",
+        "source_channel",
+        "linked_batch_id",
+        "outcome"
+      ]
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "collection_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "source_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "archive_path": {
+          "type": "string"
+        },
+        "parse_version": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "receiving",
+            "ready",
+            "archiving",
+            "parsing",
+            "review_required",
+            "collected",
+            "failed"
+          ]
+        },
+        "raw_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "id",
+        "source_hash",
+        "archive_path",
+        "state",
+        "raw_count",
+        "failed_count"
+      ]
+    },
+    "canonical_message": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "representative_occurrence": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "stable_source_id": {
+          "type": "string"
+        },
+        "dedup_version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "group_id",
+        "representative_occurrence",
+        "dedup_version"
+      ]
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "group_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "collecting",
+            "completed"
+          ]
+        },
+        "ordered_batch_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        }
+      },
+      "required": [
+        "id",
+        "group_id",
+        "state",
+        "ordered_batch_ids",
+        "created_at"
+      ]
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "body": {
+          "type": "string"
+        },
+        "user_context": {
+          "type": "string"
+        },
+        "default_scope": {
+          "type": "string",
+          "enum": [
+            "none",
+            "global",
+            "group"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "version",
+        "body",
+        "user_context",
+        "default_scope"
+      ]
+    },
+    "model_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "provider_id": {
+          "type": "string"
+        },
+        "model_catalog_id": {
+          "type": "string"
+        },
+        "credential_ref": {
+          "type": "string"
+        },
+        "validated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "unconfigured",
+            "unverified",
+            "verified",
+            "failed"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "provider_id",
+        "model_catalog_id",
+        "credential_ref",
+        "status"
+      ]
+    },
+    "brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "generation_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "markdown": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "saved"
+          ]
+        },
+        "saved_path": {
+          "type": "string"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "saved_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "(Z|[+-]\\d{2}:\\d{2})$"
+        }
+      },
+      "required": [
+        "id",
+        "generation_id",
+        "markdown",
+        "revision",
+        "status"
+      ]
+    }
+  }
+}

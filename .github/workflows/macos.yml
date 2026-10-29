@@ -1,0 +1,18 @@
+name: macOS development build
+on:
+  workflow_dispatch:
+  push:
+    paths: ['macos/**', 'scripts/**', 'shared/**', 'LICENSE', '.github/workflows/macos.yml']
+  pull_request:
+    paths: ['macos/**', 'scripts/**', 'shared/**', 'LICENSE', '.github/workflows/macos.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run isolated business and recovery checks
+        run: python3 scripts/verify-macos-product.py
+      - name: Build both architectures and observe compiler rejection
+        run: python3 scripts/macos-app.py verify-build

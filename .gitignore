@@ -1,0 +1,53 @@
+# Local private data and historical investigation (preserve on disk)
+/.private/
+/WeChatBridge/
+/run-output/
+/test-output/
+/research/
+/tools/
+/*.log
+/*.json
+/*.command
+/*.md
+!/README.md
+!/AGENTS.md
+# Credentials and local overrides
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+keys.json
+credentials.json
+# Chat archives are local data, never source
+*.zip
+*.7z
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+# Build / editor outputs
+.DS_Store
+.build/
+DerivedData/
+bin/
+obj/
+node_modules/
+dist/
+.vs/
+
+# Local verification captures and machine-specific reports (preserved on disk)
+/evidence/
+/docs/本机真实样本验收说明.md
+/docs/2026-10-29-WeChatPort开发阶段性报告.md
+
+__pycache__/
+*.pyc
+
+# Internal project instructions and development records never belong in the remote
+/docs/
+/AGENTS.md

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="0.85" y2="1"><stop stop-color="#27BC85"/><stop offset="1" stop-color="#08754E"/></linearGradient></defs>
+ <rect x="100" y="112" width="824" height="824" rx="186" fill="#052E21" opacity=".13"/>
+ <rect x="100" y="92" width="824" height="824" rx="186" fill="url(#g)"/>
+ <rect x="101" y="93" width="822" height="822" rx="185" fill="none" stroke="#FFF" stroke-opacity=".22" stroke-width="2"/>
+ <path fill="#C0F4DE" opacity=".5" d="M406 218h200a34 34 0 0 1 34 34v298H372V252a34 34 0 0 1 34-34z" transform="rotate(10 506 384)"/>
+ <path fill="#FAFFFC" d="M374 260h213l97 97v274H340V294a34 34 0 0 1 34-34z"/>
+ <path fill="#C2ECDB" d="M587 260v69a28 28 0 0 0 28 28h69z"/>
+ <path d="M402 405h121M402 463h220M402 521h153" fill="none" stroke="#21855F" stroke-width="23" stroke-linecap="round"/>
+ <path fill="#07583F" d="M262 553h52v94h119l38 48h82l38-48h119v-94h52v168a60 60 0 0 1-60 60H322a60 60 0 0 1-60-60z"/>
+ <path d="M314 647h119l38 48h82l38-48h119" fill="none" stroke="#B4F1D6" stroke-width="13" stroke-linejoin="round"/>
+</svg>
