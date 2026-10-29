@@ -115,30 +115,35 @@ final class DeepSeekClient: NSObject, URLSessionTaskDelegate {
 }
 
 @MainActor final class ModelSettings: ObservableObject {
-    @Published var selected = UserDefaults.standard.string(forKey:"deepseekModel") ?? "deepseek-flash"
+    @Published var selected: String
     @Published var keyInput = ""
     @Published var hasKey = false
     @Published var busy = false
     @Published var status = "未配置模型"
     @Published var verified: Set<String> = []
     @Published var retryAt = Date.distantPast
-    private let client = DeepSeekClient()
-    init() {
-        do { hasKey = try CredentialStore.read() != nil; status = hasKey ? "Key 已保存，待验证" : "未配置模型" }
+    private let client: DeepSeekClient
+    private let defaults: UserDefaults
+    private let credentialService: String
+    init(defaults: UserDefaults = .standard, credentialService: String = CredentialStore.defaultService, client: DeepSeekClient = DeepSeekClient()) {
+        self.defaults = defaults; self.credentialService = credentialService; self.client = client
+        let savedModel = defaults.string(forKey:"deepseekModel") ?? "deepseek-flash"
+        selected = ModelChoice.catalog.contains(where:{$0.id == savedModel}) ? savedModel : "deepseek-flash"
+        do { hasKey = try CredentialStore.read(service:credentialService) != nil; status = hasKey ? "Key 已保存，待验证" : "未配置模型" }
         catch { status = error.localizedDescription }
-        if hasKey, UserDefaults.standard.string(forKey:"validatedCatalog") == ModelChoice.version {
-            verified = Set(UserDefaults.standard.stringArray(forKey:"verifiedModels") ?? [])
-            if !verified.isEmpty { status = "连接已验证" }
+        if hasKey, defaults.string(forKey:"validatedCatalog") == ModelChoice.version {
+            verified = Set(defaults.stringArray(forKey:"verifiedModels") ?? []).intersection(Set(ModelChoice.catalog.map(\.id)))
+            if verified.contains(selected) { status = "所选型号有本机验证记录" }
         }
     }
     func save() {
         let value = keyInput.trimmingCharacters(in:.whitespacesAndNewlines)
         guard !value.isEmpty else { return }
-        do { try CredentialStore.save(value); keyInput = ""; hasKey = true; verified = []; UserDefaults.standard.removeObject(forKey:"verifiedModels"); status = "Key 已安全保存" }
+        do { try CredentialStore.save(value,service:credentialService); keyInput = ""; hasKey = true; verified = []; defaults.removeObject(forKey:"verifiedModels"); status = "Key 已安全保存" }
         catch { status = error.localizedDescription }
     }
     func remove() {
-        do { try CredentialStore.delete(); keyInput = ""; hasKey = false; verified = []; UserDefaults.standard.removeObject(forKey:"verifiedModels"); status = "已删除本机 Key" }
+        do { try CredentialStore.delete(service:credentialService); keyInput = ""; hasKey = false; verified = []; defaults.removeObject(forKey:"verifiedModels"); status = "已删除本机 Key" }
         catch { status = error.localizedDescription }
     }
     func validate() {
@@ -147,12 +152,17 @@ final class DeepSeekClient: NSObject, URLSessionTaskDelegate {
         Task {
             defer { busy = false }
             do {
-                guard let key = try CredentialStore.read() else { throw ModelFailure.credential }
+                guard let key = try CredentialStore.read(service:credentialService) else { throw ModelFailure.credential }
                 _ = try await client.generate(model:model,key:key,system:"Reply only OK.",user:"Connection validation only. Reply OK.",progress:{_ in})
-                verified.insert(model); UserDefaults.standard.set(model,forKey:"deepseekModel")
-                UserDefaults.standard.set(Array(verified),forKey:"verifiedModels"); UserDefaults.standard.set(ModelChoice.version,forKey:"validatedCatalog")
+                verified.insert(model); defaults.set(model,forKey:"deepseekModel")
+                defaults.set(Array(verified),forKey:"verifiedModels"); defaults.set(ModelChoice.version,forKey:"validatedCatalog")
                 status = "连接正常"
-            } catch { if let rate = error as? RateLimitFailure { retryAt = rate.retryAt }; verified.remove(model); status = error.localizedDescription }
+            } catch {
+                if let rate = error as? RateLimitFailure { retryAt = rate.retryAt }
+                verified.remove(model)
+                defaults.set(Array(verified),forKey:"verifiedModels")
+                status = error.localizedDescription
+            }
         }
     }
 }

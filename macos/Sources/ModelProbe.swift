@@ -42,6 +42,37 @@ final class FixtureProtocol: URLProtocol {
             FixtureProtocol.body = body
             do { _ = try await invoke(); fatalError("incomplete stream accepted") } catch is ModelFailure { }
         }
+
+        // Isolated application settings lifecycle, without touching production preferences/key.
+        let suiteName = "com.rouice.wechatport.settings-test."+UUID().uuidString
+        let defaults = UserDefaults(suiteName:suiteName)!
+        defer { defaults.removePersistentDomain(forName:suiteName) }
+        let settings = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        await MainActor.run { settings.keyInput = "synthetic-not-a-key"; settings.save() }
+        FixtureProtocol.status = 200
+        FixtureProtocol.body = "data: {\"choices\":[{\"delta\":{\"content\":\"OK\"},\"finish_reason\":\"stop\"}]}\n\ndata: [DONE]\n\n"
+        await settings.validate()
+        while await settings.busy { try await Task.sleep(nanoseconds:10_000_000) }
+        guard await settings.verified.contains("deepseek-flash") else { fatalError("settings validation success not recorded") }
+        let successRestart = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        guard await successRestart.verified.contains("deepseek-flash") else { fatalError("successful validation not restored") }
+        FixtureProtocol.status = 401
+        await settings.validate()
+        while await settings.busy { try await Task.sleep(nanoseconds:10_000_000) }
+        guard await !settings.verified.contains("deepseek-flash") else { fatalError("failed validation kept verified state") }
+        let reopened = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        guard await !reopened.verified.contains("deepseek-flash") else { fatalError("failed validation resurrected after restart") }
+
+        await MainActor.run { reopened.keyInput = "synthetic-replacement-key"; reopened.save() }
+        let replaced = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        guard await replaced.hasKey, await replaced.verified.isEmpty else { fatalError("replacement key inherited old verification") }
+        await replaced.remove()
+        let deleted = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        guard await !deleted.hasKey, await deleted.verified.isEmpty else { fatalError("deleted key restored as usable") }
+        defaults.set("unsupported-model",forKey:"deepseekModel")
+        let unsupported = await ModelSettings(defaults:defaults,credentialService:isolatedService,client:client)
+        guard await unsupported.selected == "deepseek-flash" else { fatalError("unsupported saved model was selected") }
+        print("PASS isolated model settings: success restart, failure restart, replacement/deletion verification reset and supported model fallback")
         print("PASS isolated Keychain save/read/replace/delete (no user credential access); controlled HTTPS request/stream completion; 401/403/402/429/500/503 classification; length/missing DONE/malformed response rejected. URLProtocol fixtures only, no real model call.")
     }
 }
