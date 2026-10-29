@@ -11,8 +11,8 @@ LS='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.
 def run(*args):return subprocess.check_output([str(x) for x in args],text=True,stderr=subprocess.STDOUT)
 info=plistlib.loads((SOURCE/'Contents/Info.plist').read_bytes())
 assert info['CFBundleIdentifier']=='com.rouice.wechatport'
-assert info['WeChatPortAppGroup']=='625QHA2P78.com.rouice.wechatport'
-run('codesign','--verify','--deep','--strict','-R=anchor apple generic and identifier \"com.rouice.wechatport\" and certificate leaf[subject.OU] = \"625QHA2P78\"',SOURCE)
+assert info['WeChatPortAppGroup']=='YL56SXR8GN.com.rouice.wechatport'
+run('codesign','--verify','--deep','--strict','-R=anchor apple generic and identifier \"com.rouice.wechatport\" and certificate leaf[subject.OU] = \"YL56SXR8GN\"',SOURCE)
 run('codesign','--verify','--deep','--strict',SOURCE)
 if DEST.exists():
  assert not DEST.is_symlink()

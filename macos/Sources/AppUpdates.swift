@@ -32,7 +32,7 @@ struct AppVersion: Codable, Comparable {
 }
 enum UpdateInstaller {
     static let identifier = "com.rouice.wechatport"
-    static let team = "625QHA2P78"
+    static let team = "YL56SXR8GN"
     @discardableResult static func command(_ executable: String,_ args: [String]) throws -> Data {
         let process = Process(); process.executableURL = URL(fileURLWithPath:executable); process.arguments = args
         let output = Pipe(); process.standardOutput = output; process.standardError = FileHandle.nullDevice

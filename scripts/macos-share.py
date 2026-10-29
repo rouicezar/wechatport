@@ -63,7 +63,7 @@ def build(arch, identity):
     with host_ent.open('wb') as f: plistlib.dump(dict(ent, **{'com.apple.security.files.user-selected.read-write':True, 'com.apple.security.files.bookmarks.app-scope':True, 'com.apple.security.network.client':True}), f)
     for bundle in (ext,app):
         selected_entitlement = host_ent if bundle == app else entitlement
-        run('codesign','--force','--sign',identity,'--entitlements',str(selected_entitlement),str(bundle))
+        run('codesign','--force','--sign',identity,'--options','runtime','--timestamp','--entitlements',str(selected_entitlement),str(bundle))
         run('codesign','--verify','--strict',str(bundle))
     (app.parent/'signing.txt').write_text(run('codesign','-d','--verbose=4',str(app)))
     (app.parent/'group.txt').write_text(group+'\n')

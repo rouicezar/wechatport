@@ -11,7 +11,10 @@ def run(*args):
     return subprocess.check_output([str(x) for x in args], stderr=subprocess.STDOUT)
 def verify(app):
     run('codesign', '--verify', '--deep', '--strict',
-        '-R=anchor apple generic and identifier "com.rouice.wechatport" and certificate leaf[subject.OU] = "625QHA2P78"', app)
+        '-R=anchor apple generic and identifier "com.rouice.wechatport" and certificate leaf[subject.OU] = "YL56SXR8GN" and certificate leaf[field.1.2.840.113635.100.6.1.13] exists', app)
+    for bundle in (app, app/'Contents/PlugIns/WeChatPortShare.appex'):
+        details = run('codesign','-d','--verbose=4',bundle).decode()
+        assert 'flags=0x10000(runtime)' in details and 'Timestamp=' in details
     info = plistlib.loads((app/'Contents/Info.plist').read_bytes())
     assert (info['CFBundleShortVersionString'],info['CFBundleVersion'],info['WeChatPortReleaseLabel']) == (VERSION['version'],VERSION['build'],VERSION['label'])
     return info
@@ -25,8 +28,8 @@ for relative in ('Contents/MacOS/WeChatPort','Contents/PlugIns/WeChatPortShare.a
     run('lipo','-create',*(source/relative for source in sources),'-output',app/relative)
     assert set(run('lipo','-archs',app/relative).decode().split()) == {'arm64','x86_64'}
 ext = app/'Contents/PlugIns/WeChatPortShare.appex'
-run('codesign','--force','--sign',a.identity,'--entitlements',ROOT/'run-output/p1-02/local.entitlements',ext)
-run('codesign','--force','--sign',a.identity,'--entitlements',ROOT/'run-output/p1-02/host.entitlements',app)
+run('codesign','--force','--sign',a.identity,'--options','runtime','--timestamp','--entitlements',ROOT/'run-output/p1-02/local.entitlements',ext)
+run('codesign','--force','--sign',a.identity,'--options','runtime','--timestamp','--entitlements',ROOT/'run-output/p1-02/host.entitlements',app)
 verify(app)
 (stage/'Applications').symlink_to('/Applications',target_is_directory=True)
 shutil.copy2(ROOT/'LICENSE',stage/'LICENSE.txt')
@@ -38,15 +41,15 @@ shutil.copy2(ROOT/'LICENSE',stage/'LICENSE.txt')
 
 兼容目标：macOS 14及以上，包含Apple Silicon与Intel二进制。
 当前只在Apple Silicon开发机器运行验证，Intel和最低系统待验。
-本包为Apple Development开发签名，未经Developer ID签名/公证，
-不能视为面向其他Mac的正式分发包；若系统不允许打开，请保留提示，
-不要关闭系统保护。本机开发安装可用不保证其他设备能打开。
+本包使用Developer ID签名。公证与系统分发检查结果以随包验证记录为准。
+若系统不允许打开，请保留提示，不要关闭系统保护。
 
 仅限个人非商业使用，不得商用或擅自再分发，详见LICENSE.txt。
 Windows、真实微信完整冷热/连续分享及用户质量验收仍待完成。
 ''')
 dmg = out/('WeChatPort-Beta1.0-macOS-universal.dmg')
 run('hdiutil','create','-srcfolder',stage,'-volname','WeChatPort Beta 1.0','-format','UDZO','-fs','HFS+',dmg)
+run('codesign','--force','--sign',a.identity,'--timestamp',dmg)
 run('hdiutil','verify',dmg)
 mount = out/'mounted'; mount.mkdir()
 run('hdiutil','attach','-readonly','-nobrowse','-noautoopen','-mountpoint',mount,dmg)
@@ -60,7 +63,7 @@ try:
 finally:
     run('hdiutil','detach',mount)
 record = {'dmg':str(dmg),'app':str(app),'version':VERSION,'sha256':hashlib.sha256(dmg.read_bytes()).hexdigest(),
-          'architectures':['arm64','x86_64'],'verified':['hdiutil checksum','readonly mount','every app file byte hash','Apple Team/main+extension signature','embedded personal noncommercial license'],
-          'not_proven':['Developer ID/notarization','Intel/macOS14 runtime','WeChat E2E','user acceptance'],'published':False}
+          'architectures':['arm64','x86_64'],'verified':['hdiutil checksum','readonly mount','every app file byte hash','Developer ID Team/main+extension signature and hardened runtime','embedded personal noncommercial license'],
+          'not_proven':['Apple notarization and ticket','Intel/macOS14 runtime','WeChat E2E','user acceptance'],'published':False}
 (out/'verification.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(record,ensure_ascii=False,indent=2))
