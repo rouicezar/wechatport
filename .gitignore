@@ -51,3 +51,5 @@ __pycache__/
 # Internal project instructions and development records never belong in the remote
 /docs/
 /AGENTS.md
+
+/scripts/verify-plan.py

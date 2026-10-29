@@ -158,57 +158,7 @@ struct BriefPane: View {
         GeometryReader { geo in
             HStack(spacing:0) {
                 if geo.size.width >= 850 || (brief.selected == nil && !showComposer) {
-                    VStack(alignment:.leading,spacing:14) {
-                        HStack { Text("简报").font(.title2.bold()); Spacer()
-                            Menu {
-                                Button(selecting ? "完成多选" : "多选",systemImage:"checkmark.circle") { selecting.toggle(); if !selecting { picked.ids = [] } }
-                                Button("已删除",systemImage:"trash") { showTrash = true }
-                                if !undoIDs.isEmpty { Button("撤销删除",systemImage:"arrow.uturn.backward") { restoreBriefs(undoIDs) } }
-                            } label: { Image(systemName:"ellipsis").frame(width:18,height:18) }.menuStyle(.borderlessButton).fixedSize().help("简报管理").accessibilityLabel("简报管理")
-                        }
-                        TextField("搜索群名、内容、导入或消息时间",text:$search).textFieldStyle(.roundedBorder)
-                        ScrollView {
-                            LazyVStack(alignment:.leading,spacing:0) {
-                                ForEach(visible) { record in
-                                    HStack(spacing:10) {
-                                        if selecting { Image(systemName:picked.ids.contains(record.id) ? "checkmark.circle.fill" : "circle").foregroundStyle(.secondary) }
-                                        Image(systemName:"doc.text").font(.system(size:17)).foregroundStyle(.secondary).frame(width:24)
-                                        VStack(alignment:.leading,spacing:4) {
-                                            Text(record.groupName).font(.system(size:13,weight:.semibold)).lineLimit(1)
-                                            Text("导入 " + importDisplay(record) + " · " + (record.state == "draft" ? "未保存" : state(record.state))).font(.caption).foregroundStyle(.secondary)
-                                            Text("消息 " + (messageTimes[record.id]?.listDisplay ?? "时间未知")).font(.system(size:11)).foregroundStyle(.secondary).lineLimit(2)
-                                        }
-                                        Spacer(minLength:0)
-                                        Button { togglePin(record.id) } label: { Image(systemName:pins.contains(record.id) ? "pin.fill" : "pin").font(.system(size:12)).foregroundStyle(.secondary).frame(width:24,height:28) }.buttonStyle(.plain).help(pins.contains(record.id) ? "取消置顶" : "置顶").accessibilityLabel((pins.contains(record.id) ? "取消置顶简报 " : "置顶简报 ") + record.groupName)
-                                    }.padding(.horizontal,10).padding(.vertical,10).frame(maxWidth:.infinity,alignment:.leading)
-                                    .background((picked.ids.contains(record.id) || (!selecting && picked.ids.isEmpty && brief.selected == record.id)) ? Color.primary.opacity(0.09) : Color.clear)
-                                    .clipShape(RoundedRectangle(cornerRadius:8)).contentShape(Rectangle())
-                                    .onTapGesture {
-                                        let flags = NSApp.currentEvent?.modifierFlags ?? []
-                                        picked.choose(record.id,ordered:visible.map(\.id),toggle:selecting || flags.contains(.command),range:flags.contains(.shift))
-                                        if picked.ids.count == 1 { brief.selected = record.id }
-                                    }.accessibilityElement(children:.contain).accessibilityAddTraits(.isButton)
-                                    .accessibilityValue(picked.ids.contains(record.id) ? "已选中" : "未选中")
-                                    .overlay(alignment:.bottom) { Divider().opacity(0.45).padding(.leading,44).padding(.trailing,10) }
-                                    .contextMenu {
-                                        Button(pins.contains(record.id) ? "取消置顶" : "置顶",systemImage:pins.contains(record.id) ? "pin.slash" : "pin") { togglePin(record.id) }
-                                        Button("多选",systemImage:"checkmark.circle") { selecting = true; picked.ids.insert(record.id) }
-                                        Button(picked.ids.contains(record.id) && picked.ids.count > 1 ? "删除选中的 \(picked.ids.count) 篇…" : "删除…",systemImage:"trash",role:.destructive) {
-                                            deleting = picked.ids.contains(record.id) ? picked.ids : [record.id]; showDelete = true
-                                        }.disabled(brief.busy || archive.busy)
-                                    }
-                                }
-                            }
-                        }
-                        if selecting || picked.ids.count > 1 {
-                            HStack {
-                                Text("已选 \(picked.ids.count) 篇").foregroundStyle(.secondary); Spacer()
-                                Button("全选") { picked.ids = Set(visible.map(\.id)) }
-                                Button("删除",systemImage:"trash",role:.destructive) { deleting = picked.ids; showDelete = true }.disabled(picked.ids.isEmpty || brief.busy || archive.busy)
-                            }
-                        }
-                        if brief.records.isEmpty { Text("尚无简报").foregroundStyle(.secondary) }
-                    }.padding(14).frame(width:geo.size.width >= 850 ? 304 : nil)
+                    briefList(wide:geo.size.width >= 850)
                     Divider()
                 }
                 if geo.size.width >= 850 || brief.selected != nil || showComposer {
@@ -293,9 +243,64 @@ struct BriefPane: View {
             }.padding(28).frame(width:540)
         }
     }
-    @ViewBuilder private func reader(_ record: BriefRecord) -> some View {
-        Text(record.groupName).font(.title.bold())
-        Text(state(record.state) + " · " + (ModelChoice.catalog.first(where:{$0.id == record.model})?.name ?? record.model) + " · " + record.displayDate).foregroundStyle(.secondary)
+    private func briefList(wide: Bool) -> some View {
+        VStack(alignment:.leading,spacing:14) {
+                        HStack { Text("简报").font(.title2.bold()); Spacer()
+                            Menu {
+                                Button(selecting ? "完成多选" : "多选",systemImage:"checkmark.circle") { selecting.toggle(); if !selecting { picked.ids = [] } }
+                                Button("已删除",systemImage:"trash") { showTrash = true }
+                                if !undoIDs.isEmpty { Button("撤销删除",systemImage:"arrow.uturn.backward") { restoreBriefs(undoIDs) } }
+                            } label: { Image(systemName:"ellipsis").frame(width:18,height:18) }.menuStyle(.borderlessButton).fixedSize().help("简报管理").accessibilityLabel("简报管理")
+                        }
+                        TextField("搜索群名、内容、导入或消息时间",text:$search).textFieldStyle(.roundedBorder)
+                        ScrollView {
+                            LazyVStack(alignment:.leading,spacing:0) {
+                                ForEach(visible) { record in
+                                    HStack(spacing:10) {
+                                        if selecting { Image(systemName:picked.ids.contains(record.id) ? "checkmark.circle.fill" : "circle").foregroundStyle(.secondary) }
+                                        Image(systemName:"doc.text").font(.system(size:17)).foregroundStyle(.secondary).frame(width:24)
+                                        VStack(alignment:.leading,spacing:4) {
+                                            Text(record.groupName).font(.system(size:13,weight:.semibold)).lineLimit(1)
+                                            Text("导入 " + importDisplay(record) + " · " + (record.state == "draft" ? "未保存" : state(record.state))).font(.caption).foregroundStyle(.secondary)
+                                            Text("消息 " + (messageTimes[record.id]?.listDisplay ?? "时间未知")).font(.system(size:11)).foregroundStyle(.secondary).lineLimit(2)
+                                        }
+                                        Spacer(minLength:0)
+                                        Button { togglePin(record.id) } label: { Image(systemName:pins.contains(record.id) ? "pin.fill" : "pin").font(.system(size:12)).foregroundStyle(.secondary).frame(width:24,height:28) }.buttonStyle(.plain).help(pins.contains(record.id) ? "取消置顶" : "置顶").accessibilityLabel((pins.contains(record.id) ? "取消置顶简报 " : "置顶简报 ") + record.groupName)
+                                    }.padding(.horizontal,10).padding(.vertical,10).frame(maxWidth:.infinity,alignment:.leading)
+                                    .background((picked.ids.contains(record.id) || (!selecting && picked.ids.isEmpty && brief.selected == record.id)) ? Color.primary.opacity(0.09) : Color.clear)
+                                    .clipShape(RoundedRectangle(cornerRadius:8)).contentShape(Rectangle())
+                                    .onTapGesture {
+                                        let flags = NSApp.currentEvent?.modifierFlags ?? []
+                                        picked.choose(record.id,ordered:visible.map(\.id),toggle:selecting || flags.contains(.command),range:flags.contains(.shift))
+                                        if picked.ids.count == 1 { brief.selected = record.id }
+                                    }.accessibilityElement(children:.contain).accessibilityAddTraits(.isButton)
+                                    .accessibilityValue(picked.ids.contains(record.id) ? "已选中" : "未选中")
+                                    .overlay(alignment:.bottom) { Divider().opacity(0.45).padding(.leading,44).padding(.trailing,10) }
+                                    .contextMenu {
+                                        Button(pins.contains(record.id) ? "取消置顶" : "置顶",systemImage:pins.contains(record.id) ? "pin.slash" : "pin") { togglePin(record.id) }
+                                        Button("多选",systemImage:"checkmark.circle") { selecting = true; picked.ids.insert(record.id) }
+                                        Button(picked.ids.contains(record.id) && picked.ids.count > 1 ? "删除选中的 \(picked.ids.count) 篇…" : "删除…",systemImage:"trash",role:.destructive) {
+                                            deleting = picked.ids.contains(record.id) ? picked.ids : [record.id]; showDelete = true
+                                        }.disabled(brief.busy || archive.busy)
+                                    }
+                                }
+                            }
+                        }
+                        if selecting || picked.ids.count > 1 {
+                            HStack {
+                                Text("已选 \(picked.ids.count) 篇").foregroundStyle(.secondary); Spacer()
+                                Button("全选") { picked.ids = Set(visible.map(\.id)) }
+                                Button("删除",systemImage:"trash",role:.destructive) { deleting = picked.ids; showDelete = true }.disabled(picked.ids.isEmpty || brief.busy || archive.busy)
+                            }
+                        }
+                        if brief.records.isEmpty { Text("尚无简报").foregroundStyle(.secondary) }
+                    }.padding(14).frame(width:wide ? 304 : nil)
+    }
+    private func readerMetadata(_ record: BriefRecord) -> String {
+        let modelName = ModelChoice.catalog.first(where:{$0.id == record.model})?.name ?? record.model
+        return state(record.state) + " · " + modelName + " · " + record.displayDate
+    }
+    private func readerActions(_ record: BriefRecord) -> some View {
         HStack {
             if brief.busy { Button("取消生成") { brief.cancel() } }
             else if ["failed","cancelled","interrupted","queued"].contains(record.state) {
@@ -311,6 +316,11 @@ struct BriefPane: View {
                 Button("复制",systemImage:"doc.on.doc") { NSPasteboard.general.clearContents(); NSPasteboard.general.setString(record.markdown,forType:.string) }
             }
         }
+    }
+    @ViewBuilder private func reader(_ record: BriefRecord) -> some View {
+        Text(record.groupName).font(.title.bold())
+        Text(readerMetadata(record)).foregroundStyle(.secondary)
+        readerActions(record)
         if !record.error.isEmpty { Text(record.error).foregroundStyle(.red) }
         let proposed = directory?.appendingPathComponent(MarkdownWriter.filename(record)).path
         if let path = record.savedPath ?? proposed { Label(path,systemImage:"folder").font(.caption).lineLimit(1).truncationMode(.middle).help(path).textSelection(.enabled) }

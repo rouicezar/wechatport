@@ -840,7 +840,7 @@ struct ProductStatusPanel: View {
                     Text("系统分享："+sharingStatus)
                     Text("微信实际分享：完整冷启动、已启动及连续分享仍待验；系统枚举不代表微信验证。")
                     Text("模型："+(model.hasKey ? (model.verified.contains(model.selected) ? "所选型号有本机验证记录；当前网络状态未探测" : "Key已保存，所选型号待验证") : "未配置；仍可收集和查看原文"))
-                    Text("接收队列："+inbox.status)
+                    Text("接收队列：\(inbox.batches.count) 个完整批次（含其他工作空间）")
                     if !inbox.warning.isEmpty { Text(inbox.warning).foregroundStyle(.orange) }
                     if !archive.error.isEmpty { Text("处理状态："+archive.error).foregroundStyle(.orange) }
                     Button("重新检查目录与分享注册",systemImage:"arrow.clockwise",action:check).disabled(archive.busy)
@@ -867,7 +867,7 @@ struct ProductStatusPanel: View {
                         Divider()
                     }
                     if visible.isEmpty { Text("没有匹配的批次").foregroundStyle(.secondary) }
-                    Text("未确认接收：\(inbox.batches.filter{batch in !all.contains{$0.id == batch.id}}.count) 批。请在收集页补充信息；校验未通过的批次保留在接收队列并显示警告。")
+                    Text("接收队列跨工作空间保留；当前可补充的批次请在收集页查看。校验未通过的原件保留并显示警告。")
                 }.padding(12).frame(maxWidth:.infinity,alignment:.leading)
             }
             GroupBox("存储与保留") {
