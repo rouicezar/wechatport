@@ -321,6 +321,10 @@ struct BriefPane: View {
         Text(record.groupName).font(.title.bold())
         Text(readerMetadata(record)).foregroundStyle(.secondary)
         readerActions(record)
+        readerStorage(record)
+        readerMarkdown(record)
+    }
+    @ViewBuilder private func readerStorage(_ record: BriefRecord) -> some View {
         if !record.error.isEmpty { Text(record.error).foregroundStyle(.red) }
         let proposed = directory?.appendingPathComponent(MarkdownWriter.filename(record)).path
         if let path = record.savedPath ?? proposed { Label(path,systemImage:"folder").font(.caption).lineLimit(1).truncationMode(.middle).help(path).textSelection(.enabled) }
@@ -328,6 +332,8 @@ struct BriefPane: View {
         if MarkdownWriter.status(record).contains("外部修改") {
             Button("加载磁盘版本",systemImage:"arrow.down.doc") { brief.reload(id:record.id,archive:archive) }
         }
+    }
+    @ViewBuilder private func readerMarkdown(_ record: BriefRecord) -> some View {
         if !record.markdown.isEmpty {
             Divider().opacity(0.5)
             Toggle("查看 Markdown 源文",isOn:$showMarkdown).toggleStyle(.checkbox).font(.caption).foregroundStyle(.secondary)
@@ -345,13 +351,17 @@ struct BriefPane: View {
                 VStack(alignment:.leading,spacing:5) {
                     ForEach(record.messages) { message in
                         Button { navigateSource(message) } label: {
-                            Text(message.sender + " · " + message.timeRaw + " · " + String(message.text.split(whereSeparator:{$0.isWhitespace}).joined(separator:" ").prefix(45)))
+                            Text(sourceTitle(message))
                                 .multilineTextAlignment(.leading).frame(maxWidth:.infinity,alignment:.leading)
                         }.buttonStyle(.link).controlSize(.small)
                     }
                 }.frame(maxWidth:.infinity,alignment:.leading).padding(.top,6)
             }
         }
+    }
+    private func sourceTitle(_ message: ParsedMessage) -> String {
+        let excerpt = message.text.split(whereSeparator:{$0.isWhitespace}).joined(separator:" ").prefix(45)
+        return message.sender + " · " + message.timeRaw + " · " + excerpt
     }
     private func restoreBriefs(_ ids: Set<String>) {
         Task {

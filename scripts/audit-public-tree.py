@@ -2,8 +2,8 @@
 """Review only tracked/staged public files; never open ignored local data."""
 import argparse, re, subprocess
 from pathlib import PurePosixPath
-p=argparse.ArgumentParser();p.add_argument('--staged',action='store_true');a=p.parse_args()
-args=['git','ls-files','-z'] if a.staged else ['git','ls-tree','-r','--name-only','-z','HEAD']
+p=argparse.ArgumentParser();p.add_argument('--staged',action='store_true');p.add_argument('--ref',default='HEAD');a=p.parse_args()
+args=['git','ls-files','-z'] if a.staged else ['git','ls-tree','-r','--name-only','-z',a.ref]
 paths=[s for s in subprocess.check_output(args).decode().split('\0') if s]
 allowed_roots={'.github','macos','scripts','shared','assets'}
 allowed_files={'.gitignore','README.md','LICENSE'}
@@ -19,7 +19,7 @@ for s in paths:
  if path.parts[0] not in allowed_roots and s not in allowed_files:problems.append((s,'not in public allowlist'))
  if path.suffix=='.md' and s not in allowed_md:problems.append((s,'unreviewed document'))
  if path.suffix.lower() in {'.zip','.dmg','.db','.sqlite','.log','.pem','.key','.p12','.pfx'}:problems.append((s,'private/build data type'))
- content=subprocess.check_output(['git','show',(':'+s) if a.staged else ('HEAD:'+s)])
+ content=subprocess.check_output(['git','show',(':'+s) if a.staged else (a.ref+':'+s)])
  if path.suffix.lower() in {'.png','.jpg','.jpeg','.icns','.ico'}:continue # Require separate visual review for images.
  try:text=content.decode('utf-8')
  except UnicodeDecodeError:problems.append((s,'unexpected binary'));continue

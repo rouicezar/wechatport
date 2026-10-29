@@ -1,6 +1,20 @@
-# WeChatPort
+<p align="center">
+  <img src="macos/Resources/AppIcon.png" width="112" alt="WeChatPort Logo">
+</p>
+
+<h1 align="center">WeChatPort</h1>
+
+<p align="center">分批收集聊天，让重点、分歧和行动项清楚可见。</p>
+
+<p align="center"><a href="https://github.com/rouicezar/wechatport/releases/tag/v1.0.0-beta.1">下载 Beta 1.0</a> · <a href="LICENSE">个人非商业许可</a></p>
 
 本地优先的聊天简报 Mac 应用。由你手动分享或导入聊天文件，按会话收集批次，使用自行配置的模型生成简报，并保存为 Markdown。
+
+## 界面预览
+
+应用实际界面，使用合成演示数据；不包含真实聊天或个人信息。
+
+![聊天收集与原文预览](assets/screenshots/collect-light.png)
 
 ## 使用方式
 
