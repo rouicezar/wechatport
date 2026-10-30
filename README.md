@@ -29,7 +29,7 @@
 
 [GitHub Releases](https://github.com/rouicezar/wechatport/releases) 提供已上传的版本。Beta 1.0 为测试版，macOS目标14及以上；Universal包包含Apple Silicon和Intel架构，Intel及最低系统尚未实机验证。Windows版本待提供。
 
-当前包使用Apple Development开发签名，尚未Developer ID签名和公证，不保证其他Mac可直接打开；请勿关闭系统保护。
+当前下载包为 Beta 1.0 build34，已使用 Developer ID 签名、通过 Apple 公证并装订票据。本机 Apple Silicon 已验证安装、配置、简报生成保存及重启恢复，用户已确认冷启动及连续分享成功；不等同于全新 Mac 或所有系统版本均已验证。请勿关闭系统保护。
 
 ## 使用许可
 
