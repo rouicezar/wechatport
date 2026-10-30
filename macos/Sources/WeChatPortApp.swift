@@ -101,7 +101,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return true
     }
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { !UserDefaults.standard.bool(forKey:"showMenuBar") }
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationWillTerminate(_ notification: Notification) { print("event=app_terminated"); fflush(stdout) }
 }
 
